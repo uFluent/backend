@@ -1,0 +1,114 @@
+[
+  {
+    "model": "ufbe.Pictures",
+    "pk": 1,
+    "fields": {
+      "pictureData": "https://iop.conranshop.co.uk/media/catalog/product/6/3/637237.jpg",
+      "word": "chair"
+    }
+  },
+  {
+    "model": "ufbe.Pictures",
+    "pk": 2,
+    "fields": {
+      "pictureData": "https://ae01.alicdn.com/kf/HTB1vA92OCzqK1RjSZPxq6A4tVXaP/Best-monitor-display-1368-768-Resolution-Spain-to-EU-only-HD-LCD-Screen-t2-led-television.jpg_960x960.jpg",
+      "word": "television"
+    }
+  },
+
+  {
+    "model": "ufbe.Pictures",
+    "pk": 3,
+    "fields": {
+      "pictureData": "https://images.squarespace-cdn.com/content/5a4e5020b0786964340d83a0/1520033335426-1FBIV7YRIU0HKB9JYBOK/apple.jpg?content-type=image%2Fjpeg",
+      "word": "apple"
+    }
+  },
+  {
+    "model": "ufbe.Pictures",
+    "pk": 4,
+    "fields": {
+      "pictureData": "https://www.autocar.co.uk/sites/autocar.co.uk/files/styles/gallery_slide/public/images/car-reviews/first-drives/legacy/large-2479-s-classsaloon.jpg?itok=QTxMln2k",
+      "word": "car"
+    }
+  },
+  {
+    "model": "ufbe.Pictures",
+    "pk": 5,
+    "fields": {
+      "pictureData": "https://static.evanscycles.com/production/bikes/mountain-bikes/product-image/484-319/norco-fluid-fs-3-2019-mountain-bike-black-EV337724-8500-1.jpg",
+      "word": "bike"
+    }
+  },
+
+  {
+    "model": "ufbe.Pictures",
+    "pk": 6,
+    "fields": {
+      "pictureData": "https://thumbs-prod.si-cdn.com/GQWa1qJUrzp6l27gnhxhwMAtkpI=/fit-in/1600x0/https://public-media.si-cdn.com/filer/d5/24/d5243019-e0fc-4b3c-8cdb-48e22f38bff2/istock-183380744.jpg",
+      "word": "banana"
+    }
+  },
+  {
+    "model": "ufbe.Pictures",
+    "pk": 7,
+    "fields": {
+      "pictureData": "https://cdn.britannica.com/77/170477-050-1C747EE3/Laptop-computer.jpg",
+      "word": "computer"
+    }
+  },
+  {
+    "model": "ufbe.Pictures",
+    "pk": 8,
+    "fields": {
+      "pictureData": "https://cdn.shopify.com/s/files/1/0871/3066/products/PN-1007-EspressoCup70ml-Penguin-cropped_300x300.jpg?v=1524573986",
+      "word": "cup"
+    }
+  },
+  {
+    "model": "ufbe.Pictures",
+    "pk": 9,
+    "fields": {
+      "pictureData": "https://c.static-nike.com/a/images/t_PDP_1280_v1/f_auto/3dda0908-0129-449f-a64e-017ff4f3667e/pitch-training-football-FQfsJV.jpg",
+      "word": "football"
+    }
+  },
+  {
+    "model": "ufbe.Pictures",
+    "pk": 10,
+    "fields": {
+      "pictureData": "https://www.packari.com/out/pictures/master/product/1/902104_s00020_1.jpg",
+      "word": "bottle"
+    }
+  },
+  {
+    "model": "ufbe.Users",
+    "pk": "aaaaa",
+    "fields": {
+      "avatarUrl": "test4",
+      "language": "hola",
+      "score": 0,
+      "img": 1
+    }
+  },
+  {
+    "model": "ufbe.Users",
+    "pk": "bbbbb",
+    "fields": {
+      "avatarUrl": "test3",
+      "language": "hola",
+      "score": 0,
+      "img": 2
+    }
+  },
+  {
+    "model": "ufbe.Users",
+    "pk": "ccccc",
+    "fields": {
+      "avatarUrl": "test3",
+      "language": "hola",
+      "score": 0,
+      "img": 3
+    }
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "model": "ufbe.Pictures",
+    "pk": 1,
+    "fields": {
+      "pictureData": "test",
+      "word": "hello"
+    }
+  },
+  {
+    "model": "ufbe.Pictures",
+    "pk": 2,
+    "fields": {
+      "pictureData": "test1",
+      "word": "hello1"
+    }
+  },
+
+  {
+    "model": "ufbe.Pictures",
+    "pk": 3,
+    "fields": {
+      "pictureData": "test2",
+      "word": "hello2"
+    }
+  },
+  {
+    "model": "ufbe.Users",
+    "pk": "aaaaa",
+    "fields": {
+      "avatarUrl": "test4",
+      "language": "hola",
+      "score": 0,
+      "img": 1
+    }
+  },
+  {
+    "model": "ufbe.Users",
+    "pk": "bbbbb",
+    "fields": {
+      "avatarUrl": "test3",
+      "language": "hola",
+      "score": 0,
+      "img": 2
+    }
+  },
+  {
+    "model": "ufbe.Users",
+    "pk": "ccccc",
+    "fields": {
+      "avatarUrl": "test3",
+      "language": "hola",
+      "score": 0,
+      "img": 2
+    }
+  }
+]
