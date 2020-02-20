@@ -115,10 +115,10 @@ def userByUsername(request, username):
     return patchUserByUsername(request,username)
 
 def getPictureById(request, pictureById):
-    connection = psycopg2.connect(
-        user='carlos', password='Yosipuedo30988', database='ufluent')
-    cursor = connection.cursor()
     try:
+      connection = psycopg2.connect(
+        user='carlos', password='Yosipuedo30988', database='ufluent')
+      cursor = connection.cursor()
         if pictureById.isnumeric():
             cursor = connection.cursor()
             pictures = Table('schema_pictures')
