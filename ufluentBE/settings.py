@@ -90,7 +90,7 @@ DATABASES = {
 #         'HOST': 'localhost',
 #         'PORT': '',
 #     }
-# }
+}
 
 prod_db = dj_database_url.parse('postgres://vljgdtcskkjsfy:fbbb97ede7830b1f5bfd60ad6a3ef4f63cdb58097eaf1a88889b7b5bbbf19fa7@ec2-52-23-14-156.compute-1.amazonaws.com:5432/da4dmhsrdg2vpi',conn_max_age=500)
 DATABASES['default'] = prod_db
