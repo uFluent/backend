@@ -73,7 +73,6 @@ def patchUserByUsername(request, username):
         try:
             if len(textColumnsToChange) == 2:
                 patchUser = Query.update(users).set(textColumnsToChange[0], requestData[textColumnsToChange[0]]).set(textColumnsToChange[1], requestData[textColumnsToChange[1]]).where(users.username == username)
-                print(str(patchUser))
                 patchUser = str(patchUser)
                 cursor.execute(patchUser)
             elif len(textColumnsToChange) == 1:
@@ -81,7 +80,7 @@ def patchUserByUsername(request, username):
                 patchUser = str(patchUser)
                 cursor.execute(patchUser)
 
-            if len(intColumnsToChange) == 2:
+            elif len(intColumnsToChange) == 2:
                 patchUser = """UPDATE ufbe_users SET score = score + %s, img_id = img_id + %s WHERE ufbe_users.username=%s;""",(requestData['score'],requestData['img_id'],username)
                 cursor.execute(*patchUser)
             elif len(intColumnsToChange) == 1:
@@ -108,6 +107,7 @@ def patchUserByUsername(request, username):
             cursor.close()
             connection.close()
             print('db connection closed.')
+            
 @csrf_exempt
 def userByUsername(request, username):
     if (request.method == "GET"):
@@ -147,7 +147,12 @@ def getPictureById(request, pictureById):
 def postPicture(request):
     try:
         data = dict(request.POST)
-        binary_data = a2b_base64(data['data'][0])
+        if not data:
+            data = json.loads(request.body)
+            binary_data = a2b_base64(data['data'])
+        else:
+            binary_data = a2b_base64(data['data'][0])
+        # print(binary_data)
         fd = open('image.png', 'wb')
         fd.write(binary_data)
         fd.close()
@@ -161,6 +166,7 @@ def postPicture(request):
         outcome = decode_predictions(preds, top=1)[0][0][1]
         return JsonResponse({'outcome': str(outcome)})
     except Exception as err:
+        print(err)
         return JsonResponse({'err': 'Error occured. Please try again'}, status='400')
 @csrf_exempt
 def postByUsername(request):
@@ -170,19 +176,15 @@ def postByUsername(request):
         try:
             cursor = connection.cursor()
             users = Table('ufbe_users')
-            postUser = Query.into(users).columns('username', 'language').insert(jsonRequestData['username'], jsonRequestData['language']).returning('*')
+            postUser = Query.into(users).columns('username', 'language').insert(jsonRequestData['username'], jsonRequestData['language'])
             try:
                 cursor.execute(str(postUser))
-                userData = cursor.fetchone()
             except(Exception, psycopg2.IntegrityError)as error:
                 cursor.execute("ROLLBACK;")
                 print(error)
             else:
                 cursor.execute("COMMIT;")
-                return JsonResponse({'user': {'avatarUrl': userData[0],
-                                          'language' : userData[1],
-                                          'score' : userData[2],
-                                          'img_id': userData[3]}})
+                return selectUserByUsername(request,jsonRequestData['username'])
         except (Exception, psycopg2.Error) as error:
             print('Error occured ---->', error)
             if hasattr(error,'pgerror'):

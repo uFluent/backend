@@ -21,6 +21,6 @@ urlpatterns = [
     path('/', views.sendEndpoints),
     re_path(r'^api/users/(?P<username>[\w-]+)/$', views.userByUsername),
     path('api/pictures/<slug:pictureById>',views.getPictureById),
-    path('api/pictures',views.postPicture),
+    path('api/pictures/',views.postPicture),
     path('api/users/', views.postByUsername)
 ]
