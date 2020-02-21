@@ -21,11 +21,13 @@ from urllib.parse import urlparse
 dbbytes = subprocess.run(["heroku", "config:get", "DATABASE_URL", "-a", "ufluent"], stdout=subprocess.PIPE, shell=True)
 db = dbbytes.stdout.decode('utf-8')
 parsedDB = urlparse(db)
+DATABASE_URL = os.environ['DATABASE_URL']
 
 @csrf_exempt
 def selectUserByUsername(request,username):
   # connection = psycopg2.connect(user='tom', password='password', database='ufluent')
-    connection = psycopg2.connect(host=parsedDB.hostname, database=parsedDB.path[1:-1], user=parsedDB.username,password=parsedDB.password, sslmode='require')
+    # connection = psycopg2.connect(host=parsedDB.hostname, database=parsedDB.path[1:-1], user=parsedDB.username,password=parsedDB.password, sslmode='require')
+    connection = psycopg2.connect(DATABASE_URL,sslmode='require')
     try:
         cursor = connection.cursor()
         users = Table('ufbe_users')

@@ -81,20 +81,9 @@ WSGI_APPLICATION = 'ufluentBE.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'ufluent',
-#         'USER': 'tom',
-#         'PASSWORD': 'password',
-#         'HOST': 'localhost',
-#         'PORT': '',
-#     }
-}
+DATABASES = {}
 
-prod_db = dj_database_url.parse('postgres://vljgdtcskkjsfy:fbbb97ede7830b1f5bfd60ad6a3ef4f63cdb58097eaf1a88889b7b5bbbf19fa7@ec2-52-23-14-156.compute-1.amazonaws.com:5432/da4dmhsrdg2vpi',conn_max_age=500)
-DATABASES['default'] = prod_db
-DATABASES['test']=(prod_db)
+DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
