@@ -20,7 +20,7 @@ from urllib.parse import urlparse
 
 DATABASE_URL = os.environ['DATABASE_URL']
 
-# badMethodJson = JsonResponse({'msg': "Requested method on URL is unavailable."},status=405)
+badMethodJson = JsonResponse({'msg': "Requested method on URL is unavailable."},status=405)
 
 @csrf_exempt
 def selectUserByUsername(request,username):
@@ -115,12 +115,12 @@ def userByUsername(request, username):
     if (request.method == "PATCH"):
         return patchUserByUsername(request,username)
     else:
-        # return badMethodJson
+        return badMethodJson
 
 def getPictureById(request, pictureById):
     connection = psycopg2.connect(DATABASE_URL,sslmode='require')
     if not request.method == 'GET':
-        # return badMethodJson
+        return badMethodJson
     try:
         cursor = connection.cursor()
         if pictureById.isnumeric():
@@ -197,11 +197,11 @@ def postByUsername(request):
                 connection.close()
                 print('db connection closed.')
     else:
-        # return badMethodJson
+        return badMethodJson
 
 def sendEndpoints(request):
     if not request.method == 'GET':
-        # return badMethodJson
+        return badMethodJson
     return JsonResponse({'endpoints': {
         'GET: /api/users/:username': {
             'description': 'returns the specified user info',
@@ -232,7 +232,7 @@ def sendEndpoints(request):
                 },
             'exampleRequest2': {
                 {"score":5, "img_id":2}
-            }
+            },
             'exampleResponse': {
                 'user': {
                     'avatarUrl':'new example url',
