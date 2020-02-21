@@ -17,9 +17,9 @@ import dj_database_url
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-dotenv_file = os.path.join(BASE_DIR, ".env")
-if os.path.isfile(dotenv_file):
-    dotenv.load_dotenv(dotenv_file)
+# dotenv_file = os.path.join(BASE_DIR, ".env")
+# if os.path.isfile(dotenv_file):
+#     dotenv.load_dotenv(dotenv_file)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'ufbe'
 ]
 
@@ -80,11 +81,28 @@ WSGI_APPLICATION = 'ufluentBE.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'ufluent',
+        'USER': 'tom',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '',
+    },
+    'test':{
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'ufluent_test',
+        'USER': 'tom',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
 
-prod_db = dj_database_url.parse('postgres://vljgdtcskkjsfy:fbbb97ede7830b1f5bfd60ad6a3ef4f63cdb58097eaf1a88889b7b5bbbf19fa7@ec2-52-23-14-156.compute-1.amazonaws.com:5432/da4dmhsrdg2vpi',conn_max_age=500)
-DATABASES['default'] = (prod_db)
-
+# prod_db = dj_database_url.parse('postgres://vljgdtcskkjsfy:fbbb97ede7830b1f5bfd60ad6a3ef4f63cdb58097eaf1a88889b7b5bbbf19fa7@ec2-52-23-14-156.compute-1.amazonaws.com:5432/da4dmhsrdg2vpi',conn_max_age=500)
+# DATABASES['default'] = (prod_db)
+# DATABASES['test'] = (prod_db)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
