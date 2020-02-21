@@ -82,18 +82,18 @@ WSGI_APPLICATION = 'ufluentBE.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ufluent',
-        'USER': 'tom',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'ufluent',
+#         'USER': 'tom',
+#         'PASSWORD': 'password',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
+# }
 
 prod_db = dj_database_url.parse('postgres://vljgdtcskkjsfy:fbbb97ede7830b1f5bfd60ad6a3ef4f63cdb58097eaf1a88889b7b5bbbf19fa7@ec2-52-23-14-156.compute-1.amazonaws.com:5432/da4dmhsrdg2vpi',conn_max_age=500)
-DATABASES['default'].update(prod_db)
+DATABASES['default'] = (prod_db)
 DATABASES['test']=(prod_db)
 
 # Password validation
