@@ -18,9 +18,9 @@ from django.urls import path, re_path
 from ufbe import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    re_path(r'^users/(?P<username>[\w-]+)/$', views.userByUsername),
-    path('picture/<slug:pictureById>',views.getPictureById),
-    path('picture',views.postPicture),
-    path('user/', views.postByUsername)
+    path('/', views.sendEndpoints)
+    re_path(r'^api/users/(?P<username>[\w-]+)/$', views.userByUsername),
+    path('api/pictures/<slug:pictureById>',views.getPictureById),
+    path('api/pictures',views.postPicture),
+    path('api/users/', views.postByUsername)
 ]

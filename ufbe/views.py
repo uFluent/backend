@@ -18,15 +18,12 @@ import re, json
 import subprocess
 from urllib.parse import urlparse
 
-dbbytes = subprocess.run(["heroku", "config:get", "DATABASE_URL", "-a", "ufluent"], stdout=subprocess.PIPE, shell=True)
-db = dbbytes.stdout.decode('utf-8')
-parsedDB = urlparse(db)
 DATABASE_URL = os.environ['DATABASE_URL']
+
+badMethodJson = JsonResponse({'msg': "Requested method on URL is unavailable."},status=405)
 
 @csrf_exempt
 def selectUserByUsername(request,username):
-  # connection = psycopg2.connect(user='tom', password='password', database='ufluent')
-    # connection = psycopg2.connect(host=parsedDB.hostname, database=parsedDB.path[1:-1], user=parsedDB.username,password=parsedDB.password, sslmode='require')
     connection = psycopg2.connect(DATABASE_URL,sslmode='require')
     try:
         cursor = connection.cursor()
@@ -59,9 +56,8 @@ def selectUserByUsername(request,username):
 
 def patchUserByUsername(request, username):
     requestData = json.loads(request.body)
+    connection = psycopg2.connect(DATABASE_URL,sslmode='require')
     try:
-        # connection = psycopg2.connect(user='tom',password='password',database='ufluent_test')
-        connection = psycopg2.connect(host=parsedDB.hostname, database=parsedDB.path[1:-1], user=parsedDB.username, port=5432,password=parsedDB.password)
         cursor = connection.cursor()
         users = Table('ufbe_users')
         textColumnsToChange = []
@@ -118,11 +114,14 @@ def userByUsername(request, username):
         return selectUserByUsername(request,username)
     if (request.method == "PATCH"):
         return patchUserByUsername(request,username)
+    else:
+        return badMethodJson
 
 def getPictureById(request, pictureById):
+    connection = psycopg2.connect(DATABASE_URL,sslmode='require')
+    if not request.method == 'GET':
+        return badMethodJson
     try:
-        # connection = psycopg2.connect(user='carlos', password='Yosipuedo30988', database='ufluent')
-        connection = psycopg2.connect(host=parsedDB.hostname, database=parsedDB.path[1:-1], user=parsedDB.username, port=5432,password=parsedDB.password)
         cursor = connection.cursor()
         if pictureById.isnumeric():
             cursor = connection.cursor()
@@ -166,30 +165,81 @@ def postPicture(request):
   
 def postByUsername(request):
     jsonRequestData = json.loads(request.body)
+    connection = psycopg2.connect(DATABASE_URL,sslmode='require')
     if request.method == 'POST':
         try:
-            # connection = psycopg2.connect(user='mustafa', password='password123', database='ufluent_test')
-            connection = psycopg2.connect(host=parsedDB.hostname, database=parsedDB.path[1:-1], user=parsedDB.username, port=5432,password=parsedDB.password)
             cursor = connection.cursor()
             users = Table('ufbe_users')
-            postUser = Query.into(users).columns('username', 'language').insert(jsonRequestData['username'], jsonRequestData['language'])
+            postUser = Query.into(users).columns('username', 'language').insert(jsonRequestData['username'], jsonRequestData['language']).returning('*')
             try:
                 cursor.execute(str(postUser))
-                print(str(postUser))
+                userData = cursor.fetchone()
             except(Exception, psycopg2.IntegrityError)as error:
                 cursor.execute("ROLLBACK;")
                 print(error)
             else:
                 cursor.execute("COMMIT;")
-                print(request.body)
-                # userData = cursor.execute(str(postUser))
-                return JsonResponse({'user': 1})
+                return JsonResponse({'user': {'avatarUrl': userData[0],
+                                          'language' : userData[1],
+                                          'score' : userData[2],
+                                          'img_id': userData[3]}})
         except (Exception, psycopg2.Error) as error:
             print('Error occured ---->', error)
-            # return JsonResponse({'error':error})
-            return HttpResponse("<html><body>Error $s</body></html>")
+            if hasattr(error,'pgerror'):
+                errorLines = re.findall(r"[^\n]+\n",error.pgerror)
+                return JsonResponse({'error': {'code':error.pgcode,
+                                               'msg':errorLines[0][:-1]}})
+            else:
+                return JsonResponse({'error': 'some error'})
         finally:
             if(connection):
                 cursor.close()
                 connection.close()
                 print('db connection closed.')
+    else:
+        return badMethodJson
+
+def sendEndpoints(request):
+    if not request.method == 'GET':
+        return badMethodJson
+    return JsonResponse({'endpoints': {
+        'GET: /api/users/:username': {
+            'description': 'returns the specified user info',
+            'exampleResponse': {
+                'user': {
+                    'avatarUrl':'example url',
+                    'language': 'en',
+                    'score':0,
+                    'img_id':1
+                }
+            }
+        },
+        'GET: /api/pictures/:pictureID': {
+            'description': 'returns the specified picture info',
+            'exampleResponse': {
+                'picture': {
+                    'pictureID': 1,
+                    'pictureData': 'example url',
+                    'word': 'example image word'
+                }
+            }
+        },
+        'PATCH: /api/users/:username': {
+            'description': 'changes the specified users info, returns new user object',
+            'requestLimits': 'patch request can not handle mixing data keys from the 2 example requests given',
+            'exampleRequest1': {
+                {"avatarUrl":"http://exam2.com/image2.png", "language":'fr'}
+                },
+            'exampleRequest2': {
+                {"score":5, "img_id":2}
+            }
+            'exampleResponse': {
+                'user': {
+                    'avatarUrl':'new example url',
+                    'language': 'fr',
+                    'score':5,
+                    'img_id':3
+                }
+            }
+        },
+    }})

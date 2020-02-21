@@ -17,9 +17,9 @@ import dj_database_url
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# dotenv_file = os.path.join(BASE_DIR, ".env")
-# if os.path.isfile(dotenv_file):
-#     dotenv.load_dotenv(dotenv_file)
+dotenv_file = os.path.join(BASE_DIR, ".env")
+if os.path.isfile(dotenv_file):
+    dotenv.load_dotenv(dotenv_file)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -30,7 +30,7 @@ SECRET_KEY = '#vq$-zqer3$vl3ql$8q(6ornh0x1qxk*7071-n8nc2v(9fq+ql'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ufluent.herokuapp.com','localhost','ufluenttest.herokuapp.com']
+ALLOWED_HOSTS = ['ufluent.herokuapp.com','localhost']
 
 
 # Application definition
