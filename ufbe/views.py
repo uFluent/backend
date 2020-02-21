@@ -25,7 +25,7 @@ parsedDB = urlparse(db)
 @csrf_exempt
 def selectUserByUsername(request,username):
   # connection = psycopg2.connect(user='tom', password='password', database='ufluent')
-    connection = psycopg2.connect(host=parsedDB.hostname, database=parsedDB.path[1:-1], user=parsedDB.username,password=parsedDB.password)
+    connection = psycopg2.connect(host=parsedDB.hostname, database=parsedDB.path[1:-1], user=parsedDB.username,password=parsedDB.password, sslmode='require')
     try:
         cursor = connection.cursor()
         users = Table('ufbe_users')
