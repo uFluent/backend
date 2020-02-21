@@ -30,7 +30,7 @@ SECRET_KEY = '#vq$-zqer3$vl3ql$8q(6ornh0x1qxk*7071-n8nc2v(9fq+ql'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ufluent.herokuapp.com','localhost']
+ALLOWED_HOSTS = ['ufluent.herokuapp.com','localhost','ufluenttest.herokuapp.com']
 
 
 # Application definition
