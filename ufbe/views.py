@@ -18,7 +18,7 @@ import re, json
 import subprocess
 from urllib.parse import urlparse
 
-dbbytes = subprocess.run(["heroku", "config:get", "DATABASE_URL", "-a", "ufluent"], stdout=subprocess.PIPE, shell=True)
+dbbytes = subprocess.run(["heroku", "config:get", "DATABASE_URL", "-a", "ufluent"], stdout=subprocess.PIPE)
 db = dbbytes.stdout.decode('utf-8')
 parsedDB = urlparse(db)
 
