@@ -53,7 +53,7 @@ def selectUserByUsername(request,username):
             connection.close()
             print('db connection closed.')
 
-
+@csrf_exempt
 def patchUserByUsername(request, username):
     requestData = json.loads(request.body)
     connection = psycopg2.connect(DATABASE_URL,sslmode='require')
@@ -108,7 +108,7 @@ def patchUserByUsername(request, username):
             cursor.close()
             connection.close()
             print('db connection closed.')
-
+@csrf_exempt
 def userByUsername(request, username):
     if (request.method == "GET"):
         return selectUserByUsername(request,username)
@@ -116,7 +116,7 @@ def userByUsername(request, username):
         return patchUserByUsername(request,username)
     else:
         return badMethodJson
-
+@csrf_exempt
 def getPictureById(request, pictureById):
     connection = psycopg2.connect(DATABASE_URL,sslmode='require')
     if not request.method == 'GET':
@@ -143,7 +143,7 @@ def getPictureById(request, pictureById):
         if(connection):
             cursor.close()
             connection.close()
-
+@csrf_exempt
 def postPicture(request):
     try:
         data = dict(request.POST)
@@ -162,7 +162,7 @@ def postPicture(request):
         return JsonResponse({'outcome': str(outcome)})
     except Exception as err:
         return JsonResponse({'err': 'Error occured. Please try again'}, status='400')
-  
+@csrf_exempt
 def postByUsername(request):
     jsonRequestData = json.loads(request.body)
     connection = psycopg2.connect(DATABASE_URL,sslmode='require')
@@ -198,7 +198,7 @@ def postByUsername(request):
                 print('db connection closed.')
     else:
         return badMethodJson
-
+@csrf_exempt
 def sendEndpoints(request):
     if not request.method == 'GET':
         return badMethodJson
