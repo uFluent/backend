@@ -232,12 +232,8 @@ def sendEndpoints(request):
         'PATCH: /api/users/:username': {
             'description': 'changes the specified users info, returns new user object',
             'requestLimits': 'patch request can not handle mixing data keys from the 2 example requests given',
-            'exampleRequest1': {
-                {"avatarUrl":"http://exam2.com/image2.png", "language":'fr'}
-                },
-            'exampleRequest2': {
-                {"score":5, "img_id":2}
-            },
+            'exampleRequest1': {"avatarUrl":"http://exam2.com/image2.png", "language":'fr'},
+            'exampleRequest2': {"score":5, "img_id":2},
             'exampleResponse': {
                 'user': {
                     'avatarUrl':'new example url',
