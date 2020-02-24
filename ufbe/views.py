@@ -147,6 +147,7 @@ def getPictureById(request, pictureById):
 def postPicture(request):
     try:
         data = dict(request.POST)
+        print(request.body)
         if not data:
             data = json.loads(request.body)
             binary_data = a2b_base64(data['data'])
@@ -156,7 +157,9 @@ def postPicture(request):
         fd = open('image.png', 'wb')
         fd.write(binary_data)
         fd.close()
+        print('image saved successfully')
         model = ResNet50(weights='imagenet')
+        print('ResNet run successfully')
         img_path = 'image.png'
         img = image.load_img(img_path, target_size=(224, 224))
         x = image.img_to_array(img)

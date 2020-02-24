@@ -39,7 +39,7 @@ class getPictureById(APITestCase):
         self.assertIs(type(objectResponse["status"]), str)
 class postPicture(APITestCase):
     def test_postPicture_200_picuture1(self):
-        response = self.client.post('/picture', data={'data': uriData.data1})
+        response = self.client.post('/api/pictures/', data={'data': uriData.data1})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         objectResponse = json.loads(response.content)
         print(objectResponse)
@@ -48,14 +48,14 @@ class postPicture(APITestCase):
         self.assertEqual(objectResponse, {'outcome': 'web_site'})
         self.assertIs(type(objectResponse["outcome"]), str)
     def test_postPicture_200_picuture2(self):
-        response = self.client.post('/picture', data={'data': uriData.data2})
+        response = self.client.post('/api/pictures/', data={'data': uriData.data2})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         objectResponse = json.loads(response.content)
         self.assertIs(type(objectResponse), type({}))
         self.assertEqual(objectResponse, {'outcome': 'dumbbell'})
         self.assertIs(type(objectResponse["outcome"]), str)
     def test_postPicture_400(self):
-        response = self.client.post('/picture', data={'data': 'test'})
+        response = self.client.post('/api/pictures/', data={'data': 'test'})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         objectResponse = json.loads(response.content)
         objectResponse = json.loads(response.content)
