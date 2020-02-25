@@ -507,7 +507,7 @@
     "model": "ufbe.Pictures",
     "pk": 64,
     "fields": {
-      "pictureData": "https://static.bhphoto.com/images/images2500x2500/1529950038_1418026.jpg",
+      "pictureData": "https://upload.wikimedia.org/wikipedia/commons/2/22/3-Tasten-Maus_Microsoft.jpg",
       "word": "mouse"
     }
   },
