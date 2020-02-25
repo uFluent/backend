@@ -147,23 +147,12 @@ def postPicture(request):
         data = dict(request.POST)
         if not data:
             data = json.loads(request.body)
-            binary_data = a2b_base64(data['data'])
-        else:
-            binary_data = a2b_base64(data['data'][0])
-        # print(binary_data)
-        # fd = open('image.png', 'wb')
-        # fd.write(binary_data)
-        # fd.close()
-        # print('image saved successfully')
         img2 = Image.open(BytesIO(base64.b64decode(data['data'])))
         print('image opened')
         img2 = img2.resize((224,224))
         print('resized')
         model = ResNet50(weights='imagenet')
         print('ResNet run successfully')
-        img_path = 'image.png'
-        img = image.load_img(img_path, target_size=(224, 224))
-        print(img2)
         x = image.img_to_array(img2)
         x = np.expand_dims(x, axis=0)
         x = preprocess_input(x)
