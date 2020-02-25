@@ -152,12 +152,17 @@ def postPicture(request):
         img2 = img2.resize((224,224))
         print('resized')
         model = MobileNetV2(weights='imagenet')
-        print('ResNet run successfully')
+        print('MobileNet run successfully')
         x = image.img_to_array(img2)
         x = np.expand_dims(x, axis=0)
         x = preprocess_input(x)
         preds = model.predict(x)
         outcome = decode_predictions(preds, top=1)[0][0][1]
+        print(str(outcome))
+        del data
+        del img2
+        del model
+        del x
         return JsonResponse({'outcome': str(outcome)})
     except Exception as err:
         print(err)
