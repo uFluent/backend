@@ -7,9 +7,9 @@ import os
 from django.views.decorators.csrf import csrf_exempt
 import psycopg2
 from pypika import Query, Table
-from keras.applications.nasnet import NASNetMobile
+from keras.applications.xception import Xception
 from keras.preprocessing import image
-from keras.applications.nasnet import preprocess_input, decode_predictions
+from keras.applications.xception import preprocess_input, decode_predictions
 import numpy as np
 from io import BytesIO
 import base64
@@ -150,9 +150,9 @@ def postPicture(request):
             data = json.loads(request.body)
         img2 = Image.open(BytesIO(base64.b64decode(data['data'])))
         print('image opened')
-        img2 = img2.resize((224,224))
+        img2 = img2.resize((299,299))
         print('resized')
-        model = NASNetMobile(weights='imagenet')
+        model = Xception(weights='imagenet')
         print('NASNet run successfully')
         x = image.img_to_array(img2)
         x = np.expand_dims(x, axis=0)
@@ -168,8 +168,8 @@ def postPicture(request):
     except Exception as err:
         print(err)
         return JsonResponse({'err': 'Error occured. Please try again'}, status='400')
-    finally:
-        subprocess.run(['heroku', 'restart', '--app', 'ufluent'], shell=True)
+    # finally:
+    #     subprocess.run('heroku restart --app ufluent', shell=True)
 @csrf_exempt
 def postByUsername(request):
     jsonRequestData = json.loads(request.body)
