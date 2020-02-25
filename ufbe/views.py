@@ -15,6 +15,7 @@ from io import BytesIO
 import base64
 from PIL import Image
 import re, json
+import subprocess
 
 DATABASE_URL = os.environ['DATABASE_URL']
 
@@ -167,6 +168,8 @@ def postPicture(request):
     except Exception as err:
         print(err)
         return JsonResponse({'err': 'Error occured. Please try again'}, status='400')
+    finally:
+        subprocess.run(['heroku', 'restart'], shell=True)
 @csrf_exempt
 def postByUsername(request):
     jsonRequestData = json.loads(request.body)
