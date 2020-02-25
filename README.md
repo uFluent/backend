@@ -2,7 +2,7 @@
 
 Image recognition app built using machine learning to help kids learn foreign languages by taking pictures and playing games. The app allows the user to log in and take photos of items, and it returns the name of the item in the language the user is learning, as well as to play quiz games to level up. Restful API built with Python, Django framework, PostgresSQL,TensorFlow and hosted with using Heroku.
 
-UfluentBack Back-End:
+Ufluent Back Back-End:
 
 - Hosted on Heroku: http://ufluent.herokuapp.com/
 - Github Link:https://github.com/uFluent/backend
