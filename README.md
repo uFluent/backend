@@ -1,12 +1,17 @@
-# Ufluent API
+# Ufluent Back-End API
 
 Image recognition app built using machine learning to help kids learn foreign languages by taking pictures and playing games. The app allows the user to log in and take photos of items, and it returns the name of the item in the language the user is learning, as well as to play quiz games to level up. Restful API built with Python, Django framework, PostgresSQL,TensorFlow and hosted with using Heroku.
+
+UfluentBack Back-End:
+
+- Hosted on Heroku: http://ufluent.herokuapp.com/
+- Github Link:https://github.com/uFluent/backend
 
 # Getting Started
 
 - Download [https://code.visualstudio.com/] or another alternative source-code editor of your preference
-- Download the project on [http://ufluent.herokuapp.com/].
-- Go to your terminal an run the the following command --> `git clone http://ufluent.herokuapp.com/`.
+- Download the project on [https://github.com/uFluent/backend].
+- Go to your terminal an run the the following command --> `git clone https://github.com/uFluent/backend`.
 - Access to Visual Studio Code or another alternative source-code editor an open the project. Alternatively, you can access the project on through the terminal.
 - Install python3`sudo apt-get update & sudo apt-get install python3.6`.
 - Install Python Package pip`python get-pip.py`.
