@@ -169,7 +169,7 @@ def postPicture(request):
         print(err)
         return JsonResponse({'err': 'Error occured. Please try again'}, status='400')
     finally:
-        subprocess.run(['heroku', 'restart'], shell=True)
+        subprocess.run(['heroku', 'ps:restart'], shell=True)
 @csrf_exempt
 def postByUsername(request):
     jsonRequestData = json.loads(request.body)
