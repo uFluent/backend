@@ -11,8 +11,6 @@ from keras.applications.resnet50 import ResNet50
 from keras.preprocessing import image
 from keras.applications.resnet50 import preprocess_input, decode_predictions
 import numpy as np
-from binascii import a2b_base64
-import os.path
 from io import BytesIO
 import base64
 from PIL import Image
