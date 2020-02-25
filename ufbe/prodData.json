@@ -155,7 +155,7 @@
     "model": "ufbe.Pictures",
     "pk": 20,
     "fields": {
-      "pictureData": "https://www.lovethegarden.com/sites/default/files/content/articles/UK_wildbirds-01-robin.jpg",
+      "pictureData": "https://www.imperial.ac.uk/ImageCropToolT4/imageTool/uploaded-images/newseventsimage_1529346275459_mainnews2012_x1.jpg",
       "word": "bird"
     }
   },
@@ -363,7 +363,7 @@
     "model": "ufbe.Pictures",
     "pk": 46,
     "fields": {
-      "pictureData": "https://upload.wikimedia.org/wikipedia/commons/3/32/Dessert_Spoon.jpg",
+      "pictureData": "https://images-na.ssl-images-amazon.com/images/I/61Y-85Ei4-L._AC_SX522_.jpg",
       "word": "spoon"
     }
   },
