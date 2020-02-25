@@ -7,9 +7,9 @@ import os
 from django.views.decorators.csrf import csrf_exempt
 import psycopg2
 from pypika import Query, Table
-from keras.applications.mobilenet_v2 import MobileNetV2
+from keras.applications.densenet import DenseNet121
 from keras.preprocessing import image
-from keras.applications.mobilenet_v2 import preprocess_input, decode_predictions
+from keras.applications.densenet import preprocess_input, decode_predictions
 import numpy as np
 from io import BytesIO
 import base64
@@ -151,8 +151,8 @@ def postPicture(request):
         print('image opened')
         img2 = img2.resize((224,224))
         print('resized')
-        model = MobileNetV2(weights='imagenet')
-        print('MobileNet run successfully')
+        model = DenseNet121(weights='imagenet')
+        print('DenseNet run successfully')
         x = image.img_to_array(img2)
         x = np.expand_dims(x, axis=0)
         x = preprocess_input(x)
