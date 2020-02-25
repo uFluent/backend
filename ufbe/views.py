@@ -158,7 +158,7 @@ def postPicture(request):
         x = preprocess_input(x)
         preds = model.predict(x)
         outcome = decode_predictions(preds, top=1)[0][0][1]
-        print(str(outcome))
+        print(str(outcome), 'OUTCOME IS HERE!!!!!!!!!!!!!!!')
         del data
         del img2
         del model
