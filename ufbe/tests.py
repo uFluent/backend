@@ -6,7 +6,7 @@ from . import uriData
 
 class getPictureById(APITestCase):
     def test_getPictureById_200(self):
-        response = self.client.get('/picture/1')
+        response = self.client.get('/api/pictures/1')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         objectResponse = json.loads(response.content)
         self.assertIs(type(objectResponse), type({}))
@@ -16,7 +16,7 @@ class getPictureById(APITestCase):
         self.assertIs(type(objectResponse["picture"]["pictureData"]), str)
         self.assertIs(type(objectResponse["picture"]["word"]), str)
     def test_getPictureById_400_non_existent_id(self):
-        response = self.client.get('/picture/99999')
+        response = self.client.get('/api/pictures/99999')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         objectResponse = json.loads(response.content)
         self.assertIs(type(objectResponse), type({}))
@@ -27,7 +27,7 @@ class getPictureById(APITestCase):
         self.assertIs(type(objectResponse["msg"]), str)
         self.assertIs(type(objectResponse["status"]), str)
     def test_getPictureById_400_non_valid_id(self):
-        response = self.client.get('/picture/wefwe3')
+        response = self.client.get('/api/pictures/wefwe3')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         objectResponse = json.loads(response.content)
         self.assertIs(type(objectResponse), type({}))
@@ -37,6 +37,7 @@ class getPictureById(APITestCase):
         })
         self.assertIs(type(objectResponse["msg"]), str)
         self.assertIs(type(objectResponse["status"]), str)
+        
 class postPicture(APITestCase):
     def test_postPicture_200_picuture1(self):
         response = self.client.post('/api/pictures/', data={'data': uriData.data1})
@@ -62,3 +63,9 @@ class postPicture(APITestCase):
         self.assertIs(type(objectResponse), type({}))
         self.assertEqual(objectResponse, {
                          'err': 'Error occured. Please try again'})
+
+class getUserByUsername(APITestCase):
+    def test_getUser_200(self):
+        response = self.client.get('/api/users/bbbbb/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        print(response.content)
