@@ -13,10 +13,10 @@ from keras.applications.resnet50 import preprocess_input, decode_predictions
 import numpy as np
 from binascii import a2b_base64
 import os.path
+from io import BytesIO
+import base64
 from PIL import Image
 import re, json
-import subprocess
-from urllib.parse import urlparse
 
 DATABASE_URL = os.environ['DATABASE_URL']
 
@@ -133,7 +133,7 @@ def getPictureById(request, pictureById):
                 error = {'msg': 'picture id does not exist', 'status': '404'}
                 return JsonResponse(error, status=404)
             else:
-                return JsonResponse({'picture': {'pictureId': pictureData[0], 'pictureData': pictureData[1], 'word': pictureData[2]}})
+                return JsonResponse({'picture': {'pictureId': pictureData[0], 'pictureData': pictureData[1], 'word': pictureData[2]}}, status=200)
         else:
             error = {'msg': 'picture id is not a number', 'status': '404'}
             return JsonResponse(error, status=404)
@@ -147,22 +147,26 @@ def getPictureById(request, pictureById):
 def postPicture(request):
     try:
         data = dict(request.POST)
-        print(request.body)
         if not data:
             data = json.loads(request.body)
             binary_data = a2b_base64(data['data'])
         else:
             binary_data = a2b_base64(data['data'][0])
         # print(binary_data)
-        fd = open('image.png', 'wb')
-        fd.write(binary_data)
-        fd.close()
-        print('image saved successfully')
+        # fd = open('image.png', 'wb')
+        # fd.write(binary_data)
+        # fd.close()
+        # print('image saved successfully')
+        img2 = Image.open(BytesIO(base64.b64decode(data['data'])))
+        print('image opened')
+        img2 = img2.resize((224,224))
+        print('resized')
         model = ResNet50(weights='imagenet')
         print('ResNet run successfully')
         img_path = 'image.png'
         img = image.load_img(img_path, target_size=(224, 224))
-        x = image.img_to_array(img)
+        print(img2)
+        x = image.img_to_array(img2)
         x = np.expand_dims(x, axis=0)
         x = preprocess_input(x)
         preds = model.predict(x)
