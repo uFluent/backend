@@ -89,11 +89,11 @@ The Xception algorithm is used for more accurate photo predictions sacrificing s
 
 # Authors
 
-- Tom Limforth
-- Carlos Beltran
-- Mustafa Habashi
 - Andrew Ng
+- Carlos Beltran
 - Joe Cooper 
+- Tom Limforth
+- Mustafa Habashi
 
 # Acknowledgments
 
