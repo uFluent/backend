@@ -20,7 +20,7 @@ import subprocess
 
 DATABASE_URL = os.environ['DATABASE_URL']
 
-badMethodJson = JsonResponse({'msg': "Requested method on URL is unavailable."},status=405)
+badMethodJson = JsonResponse({'msg': "Requested method on URL is unavailable.", 'status':405},status=405)
 
 @csrf_exempt
 def selectUserByUsername(request,username):
@@ -35,10 +35,16 @@ def selectUserByUsername(request,username):
             error = {'msg': 'User does not exist', 'status':404 }
             return JsonResponse(error, status=404)
         else:
-            return JsonResponse({'user': {'avatarUrl': userData[0],
-                                          'language' : userData[1],
-                                          'score' : userData[2],
-                                          'img_id': userData[3]}})
+            if request.method == "POST":
+                return JsonResponse({'user': {'avatarUrl': userData[0],
+                                              'language' : userData[1],
+                                              'score' : userData[2],
+                                              'img_id': userData[3]}}, status=201)
+            else:
+                return JsonResponse({'user': {'avatarUrl': userData[0],
+                                              'language' : userData[1],
+                                              'score' : userData[2],
+                                              'img_id': userData[3]}})
     except (Exception, psycopg2.Error) as error:
         if hasattr(error,'pgerror'):
             errorLines = re.findall(r"[^\n]+\n",error.pgerror)
@@ -51,10 +57,11 @@ def selectUserByUsername(request,username):
         if(connection):
             cursor.close()
             connection.close()
-            print('db connection closed.')
 
 @csrf_exempt
 def patchUserByUsername(request, username):
+    if not request.body:
+        return JsonResponse({'msg':'No valid patch data in request', 'status':400},status=400)
     requestData = json.loads(request.body)
     connection = psycopg2.connect(DATABASE_URL,sslmode='require')
     try:
@@ -68,7 +75,7 @@ def patchUserByUsername(request, username):
         intColumnsToChange.append('img_id')if 'img_id' in requestData else ''
 
         if not len(intColumnsToChange) == 0 and not len(textColumnsToChange) == 0:
-            return JsonResponse({'msg':'Can only patch (avatarUrl and language) or (img_id and score) at the same time.'},status=400)
+            return JsonResponse({'msg':'Can only patch (avatarUrl and language) or (img_id and score) at the same time.', 'status':400},status=400)
 
         try:
             if len(textColumnsToChange) == 2:
@@ -85,9 +92,7 @@ def patchUserByUsername(request, username):
                 cursor.execute(*patchUser)
             elif len(intColumnsToChange) == 1:
                 patchUser = """UPDATE ufbe_users SET {0} = {1} + %s WHERE ufbe_users.username=%s;""".format(intColumnsToChange[0],intColumnsToChange[0]),(requestData[intColumnsToChange[0]],username)
-                cursor.execute(*patchUser)
-            else:
-                return JsonResponse({'msg':'No valid patch data in request'},status=400)
+                cursor.execute(*patchUser)                
       
         except Exception as error:
             cursor.execute('ROLLBACK;')
@@ -95,7 +100,6 @@ def patchUserByUsername(request, username):
             return JsonResponse({'msg':'Error patching data'},status=500)
         else:
             cursor.execute('COMMIT;')
-            print('success')
             return selectUserByUsername(request,username)
     
     except(Exception, psycopg2.Error) as error:
@@ -106,7 +110,6 @@ def patchUserByUsername(request, username):
         if(connection):
             cursor.close()
             connection.close()
-            print('db connection closed.')
             
 @csrf_exempt
 def userByUsername(request, username):
@@ -135,8 +138,8 @@ def getPictureById(request, pictureById):
             else:
                 return JsonResponse({'picture': {'pictureId': pictureData[0], 'pictureData': pictureData[1], 'word': pictureData[2]}}, status=200)
         else:
-            error = {'msg': 'picture id is not a number', 'status': '404'}
-            return JsonResponse(error, status=404)
+            error = {'msg': 'picture id is not a number', 'status': '400'}
+            return JsonResponse(error, status=400)
     except Exception as err:
         return JsonResponse({'error': err})
     finally:
@@ -145,13 +148,14 @@ def getPictureById(request, pictureById):
             connection.close()
 @csrf_exempt
 def postPicture(request):
+    if not (request.method == 'POST'):
+        return badMethodJson
     try:
-        dataFromTest = request.POST
-        if not dataFromTest:
+        try:
             data = json.loads(request.body)
-        else:
-            data = {'data':dataFromTest['data']}
-        print(data)
+        except:
+            return JsonResponse({'msg':'No post data in request', 'status':400},status=400)
+        
         img2 = Image.open(BytesIO(base64.b64decode(data['data'])))
         print('image opened')
         if not 'fast' in data:
@@ -174,7 +178,6 @@ def postPicture(request):
             outcome = "nothing recognised"
         else:
             outcome = outcome[1]
-        print(str(outcome), 'OUTCOME IS HERE!!!!!!!!!!!!!!!')
         return JsonResponse({'outcome': str(outcome)})
     except Exception as err:
         print(err)
@@ -183,9 +186,17 @@ def postPicture(request):
         subprocess.run('heroku restart --app ufluent', shell=True)
 @csrf_exempt
 def postByUsername(request):
-    jsonRequestData = json.loads(request.body)
-    connection = psycopg2.connect(DATABASE_URL,sslmode='require')
     if request.method == 'POST':
+        try:
+            jsonRequestData = json.loads(request.body)
+        except:
+            return JsonResponse({'msg':'No post data in request', 'status':400},status=400)
+        
+        connection = psycopg2.connect(DATABASE_URL,sslmode='require')
+        if not 'language' in jsonRequestData:
+            return JsonResponse({'msg':'Missing language from request', 'status':400}, status=400)
+        elif not 'username' in jsonRequestData:
+            return JsonResponse({'msg':'Missing username from request', 'status':400}, status=400)
         try:
             cursor = connection.cursor()
             users = Table('ufbe_users')
@@ -194,7 +205,8 @@ def postByUsername(request):
                 cursor.execute(str(postUser))
             except(Exception, psycopg2.IntegrityError)as error:
                 cursor.execute("ROLLBACK;")
-                print(error)
+                if error.pgcode == '23505':
+                    return JsonResponse({'msg':'User already exists', 'status':400}, status=400)
             else:
                 cursor.execute("COMMIT;")
                 return selectUserByUsername(request,jsonRequestData['username'])
@@ -203,14 +215,13 @@ def postByUsername(request):
             if hasattr(error,'pgerror'):
                 errorLines = re.findall(r"[^\n]+\n",error.pgerror)
                 return JsonResponse({'error': {'code':error.pgcode,
-                                               'msg':errorLines[0][:-1]}})
+                                               'msg':errorLines[0][:-1]}}, status=400)
             else:
-                return JsonResponse({'error': 'some error'})
+                return JsonResponse({'error': 'some error'},status=400)
         finally:
             if(connection):
                 cursor.close()
                 connection.close()
-                print('db connection closed.')
     else:
         return badMethodJson
 @csrf_exempt
