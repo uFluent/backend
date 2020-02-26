@@ -146,9 +146,12 @@ def getPictureById(request, pictureById):
 @csrf_exempt
 def postPicture(request):
     try:
-        data = dict(request.POST)
-        if not data:
+        dataFromTest = request.POST
+        if not dataFromTest:
             data = json.loads(request.body)
+        else:
+            data = {'data':dataFromTest['data']}
+        print(data)
         img2 = Image.open(BytesIO(base64.b64decode(data['data'])))
         print('image opened')
         if not 'fast' in data:
@@ -166,14 +169,18 @@ def postPicture(request):
         x = np.expand_dims(x, axis=0)
         x = preprocess_input(x)
         preds = model.predict(x)
-        outcome = decode_predictions(preds, top=1)[0][0][1]
+        outcome = decode_predictions(preds, top=1)[0][0]
+        if outcome[2] < 0.35:
+            outcome = "nothing recognised"
+        else:
+            outcome = outcome[1]
         print(str(outcome), 'OUTCOME IS HERE!!!!!!!!!!!!!!!')
         return JsonResponse({'outcome': str(outcome)})
     except Exception as err:
         print(err)
         return JsonResponse({'err': 'Error occured. Please try again'}, status='400')
-    finally:
-        subprocess.run('heroku restart --app ufluent', shell=True)
+    # finally:
+    #     subprocess.run('heroku restart --app ufluent', shell=True)
 @csrf_exempt
 def postByUsername(request):
     jsonRequestData = json.loads(request.body)
