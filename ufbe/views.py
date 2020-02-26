@@ -179,8 +179,8 @@ def postPicture(request):
     except Exception as err:
         print(err)
         return JsonResponse({'err': 'Error occured. Please try again'}, status='400')
-    # finally:
-    #     subprocess.run('heroku restart --app ufluent', shell=True)
+    finally:
+        subprocess.run('heroku restart --app ufluent', shell=True)
 @csrf_exempt
 def postByUsername(request):
     jsonRequestData = json.loads(request.body)
